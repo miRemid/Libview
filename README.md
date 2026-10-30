@@ -30,6 +30,27 @@ npm run dev
 
 请在正式使用前修改该密码。
 
+## Docker 部署（SPA + PocketBase）
+
+生产环境把 Vite 打成静态 SPA，交给 PocketBase 同源托管：`/api` 和 `/_/` 是后端，其余路径回退到 `index.html`。
+
+```bash
+docker compose up --build -d
+```
+
+- 网站：http://127.0.0.1:8090
+- 管理后台：http://127.0.0.1:8090/admin
+- PocketBase 面板：http://127.0.0.1:8090/_/
+
+ImgBed 读取当前目录的 `.env`（`IMGBED_URL`、`IMGBED_TOKEN`），compose 会传进容器。数据在 Docker volume `pb_data` 里。若要用现有本地库，把 `docker-compose.yml` 里的 volume 改成：
+
+```yaml
+volumes:
+  - ./pocketbase/pb_data:/pb/pb_data
+```
+
+映射 80 端口时写成 `"80:8090"` 即可。
+
 ## 图片与元数据
 
 上传时会读取 EXIF，并保存：

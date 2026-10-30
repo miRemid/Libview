@@ -1,0 +1,18 @@
+services:
+  libview:
+    build:
+      context: .
+      args:
+        VITE_PB_URL: ${VITE_PB_URL:-}
+    image: libview:latest
+    ports:
+      - "8090:8090"
+    volumes:
+      - pb_data:/pb/pb_data
+    environment:
+      IMGBED_URL: ${IMGBED_URL:-}
+      IMGBED_TOKEN: ${IMGBED_TOKEN:-}
+    restart: unless-stopped
+
+volumes:
+  pb_data:

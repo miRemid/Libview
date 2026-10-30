@@ -4,6 +4,7 @@ import type { Photo } from './types'
 function pocketBaseUrl() {
   if (import.meta.env.VITE_PB_URL) return import.meta.env.VITE_PB_URL
   if (typeof window !== 'undefined') {
+    if (import.meta.env.PROD) return window.location.origin
     const { protocol, hostname } = window.location
     return `${protocol}//${hostname}:8090`
   }

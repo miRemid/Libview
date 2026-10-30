@@ -10,7 +10,9 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "seed:unsplash": "node scripts/seed-unsplash.mjs"
+    "seed:unsplash": "node scripts/seed-unsplash.mjs",
+    "docker:up": "docker compose up --build -d",
+    "docker:down": "docker compose down"
   },
   "dependencies": {
     "exifr": "^7.1.3",
