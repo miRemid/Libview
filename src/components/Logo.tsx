@@ -25,7 +25,7 @@ export function LogoMark({ className = 'h-8 w-8' }: LogoProps) {
 export default function Logo({ className = 'h-8 w-auto' }: LogoProps) {
   return (
     <svg
-      viewBox="0 0 148 32"
+      viewBox="0 0 156 32"
       className={className}
       role="img"
       aria-label="Libview"
@@ -42,12 +42,13 @@ export default function Logo({ className = 'h-8 w-auto' }: LogoProps) {
       </g>
       <text
         x="38"
-        y="22"
+        y="16"
+        dominantBaseline="middle"
         fill="currentColor"
-        fontFamily="Fraunces, ui-serif, Georgia, serif"
-        fontSize="21"
-        fontWeight="500"
-        letterSpacing="-0.03em"
+        fontFamily="Outfit, ui-sans-serif, system-ui, sans-serif"
+        fontSize="20"
+        fontWeight="600"
+        letterSpacing="0.04em"
       >
         Libview
       </text>
