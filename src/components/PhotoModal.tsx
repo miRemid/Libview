@@ -4,7 +4,6 @@ import { pb, photoUrl } from '../lib/pocketbase'
 import type { Photo } from '../lib/types'
 import type { GalleryOutletContext } from '../pages/Gallery'
 import ExifStrip from './ExifStrip'
-import Header from './Header'
 
 type LocationState = {
   fromGallery?: boolean
@@ -64,45 +63,24 @@ export default function PhotoModal() {
   }, [cached, id])
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-paper lg:overflow-hidden">
+    <div className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper lg:overflow-hidden">
       <div className="flex min-h-full flex-col lg:h-full">
-        <Header />
-
         <div className="flex min-h-0 flex-1 items-center justify-center px-5 py-4 sm:px-8 lg:px-8 lg:py-6">
           {photo ? (
-            <div className="flex w-full max-w-5xl flex-col lg:w-auto lg:flex-row lg:items-start lg:gap-6">
-              <div className="flex justify-center">
-                <div className="relative inline-block max-w-full">
-                  <img
-                    src={photoUrl(photo)}
-                    alt={photo.title || '摄影作品'}
-                    className="max-h-[58vh] w-auto max-w-full object-contain lg:max-h-[64vh] lg:max-w-[min(640px,52vw)]"
-                  />
-                  <button
-                    type="button"
-                    onClick={close}
-                    className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-sm text-ink shadow-sm backdrop-blur-sm transition hover:bg-white"
-                  >
-                    <svg
-                      viewBox="0 0 16 16"
-                      className="h-4 w-4"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M10 3 5 8l5 5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    返回
-                  </button>
-                </div>
-              </div>
-
-              <aside className="mt-6 border-t border-line pt-6 lg:mt-0 lg:max-h-[64vh] lg:w-[280px] lg:shrink-0 lg:overflow-y-auto lg:border-t-0 lg:pt-0">
+            <div className="grid w-full max-w-5xl grid-cols-1 lg:w-auto lg:grid-cols-[auto_280px] lg:gap-x-6">
+              <button
+                type="button"
+                onClick={close}
+                className="col-start-1 row-start-1 mb-3 justify-self-start text-sm text-mute transition-colors hover:text-ink"
+              >
+                返回
+              </button>
+              <img
+                src={photoUrl(photo)}
+                alt={photo.title || '摄影作品'}
+                className="col-start-1 row-start-2 max-h-[58vh] w-auto max-w-full justify-self-start object-contain lg:max-h-[64vh] lg:max-w-[min(640px,52vw)]"
+              />
+              <aside className="col-start-1 row-start-3 mt-6 border-t border-line pt-6 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:max-h-[64vh] lg:overflow-y-auto lg:border-t-0 lg:pt-0">
                 <h2 className="font-serif text-2xl text-ink">
                   {photo.title || '未命名'}
                 </h2>
