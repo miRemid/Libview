@@ -20,7 +20,7 @@ export default function ExifStrip({ photo }: { photo: Photo }) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
+    <div className="grid grid-cols-2 gap-x-6 gap-y-4">
       <Item label="相机" value={cameraLine(photo)} />
       <Item label="镜头" value={photo.lens} />
       <Item label="焦距" value={photo.focal_length} />

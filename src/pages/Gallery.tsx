@@ -33,10 +33,10 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-paper">
       <Header />
-      <main className="mx-auto max-w-7xl px-5 pb-20 sm:px-8">
-        <section className="py-14 sm:py-20">
+      <main className="mx-auto max-w-7xl px-3 pb-16 sm:px-8 lg:pb-20">
+        <section className="py-8 sm:py-14 lg:py-20">
           <p className="text-xs uppercase tracking-[0.28em] text-mute">Photography</p>
-          <h1 className="mt-3 max-w-2xl font-serif text-4xl leading-tight text-ink sm:text-6xl">
+          <h1 className="mt-3 max-w-2xl font-serif text-3xl leading-tight text-ink sm:text-4xl lg:text-6xl">
             把光留下。
           </h1>
           <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-mute">
@@ -45,12 +45,12 @@ export default function Gallery() {
         </section>
 
         {loading ? (
-          <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
+          <div className="columns-2 gap-2 lg:columns-3 lg:gap-4">
             {[0, 1, 2, 3, 4, 5].map((item) => (
               <div
                 key={item}
-                className="mb-4 break-inside-avoid bg-mist"
-                style={{ height: item % 2 === 0 ? 280 : 420 }}
+                className="mb-2 break-inside-avoid bg-mist lg:mb-4"
+                style={{ height: item % 2 === 0 ? 180 : 260 }}
               />
             ))}
           </div>
