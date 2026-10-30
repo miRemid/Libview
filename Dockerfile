@@ -1,6 +1,5 @@
-# syntax=docker/dockerfile:1
-
-FROM node:22-alpine AS web
+FROM alpine:3.22 AS web
+RUN apk add --no-cache nodejs npm
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -11,7 +10,7 @@ ARG VITE_PB_URL=
 ENV VITE_PB_URL=$VITE_PB_URL
 RUN npm run build
 
-FROM alpine:3.21
+FROM alpine:3.22
 ARG PB_VERSION=0.40.5
 ARG TARGETARCH
 RUN apk add --no-cache ca-certificates curl unzip \
