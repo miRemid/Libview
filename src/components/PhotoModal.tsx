@@ -74,16 +74,19 @@ export default function PhotoModal() {
 
   return (
     <>
-      <div className="fixed inset-0 z-40 overflow-y-auto bg-paper lg:overflow-hidden">
+      <div className="animate-fade-in fixed inset-0 z-40 overflow-y-auto bg-paper lg:overflow-hidden">
         <div className="flex min-h-full flex-col pt-16 lg:h-full">
           <div className="flex min-h-0 flex-1 items-start justify-center px-5 py-4 sm:px-8 lg:items-center lg:px-8 lg:py-6">
             {photo ? (
-              <div className="grid w-full max-w-5xl grid-cols-1 lg:w-auto lg:grid-cols-[auto_280px] lg:gap-x-6">
+              <div
+                key={photo.id}
+                className="animate-fade-up grid w-full max-w-5xl grid-cols-1 lg:w-auto lg:grid-cols-[auto_280px] lg:gap-x-6"
+              >
                 <button
                   type="button"
                   onClick={close}
                   aria-label="返回"
-                  className="col-start-1 row-start-1 mb-3 justify-self-start text-mute transition-colors hover:text-ink"
+                  className="col-start-1 row-start-1 mb-3 justify-self-start text-mute transition-colors duration-200 hover:text-ink"
                 >
                   <svg
                     viewBox="0 0 24 24"

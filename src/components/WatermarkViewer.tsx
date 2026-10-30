@@ -50,7 +50,7 @@ function CssWatermarkCard({ photo }: { photo: Photo }) {
   const params = watermarkParams(photo)
 
   return (
-    <figure className="@container overflow-hidden bg-white shadow-[0_24px_80px_rgba(20,20,20,0.16)]">
+    <figure className="animate-scale-in @container overflow-hidden bg-white shadow-[0_24px_80px_rgba(20,20,20,0.16)]">
       <img
         src={photoUrl(photo)}
         alt={photo.title || '摄影作品'}
@@ -224,7 +224,7 @@ export default function WatermarkViewer({ photo, onClose }: WatermarkViewerProps
       role="dialog"
       aria-modal="true"
       aria-label="带参数水印的大图"
-      className="fixed inset-0 z-[70] overflow-hidden bg-ink/35"
+      className="animate-fade-in fixed inset-0 z-[70] overflow-hidden bg-ink/35"
     >
       {fallback ? (
         <ZoomStage onClose={onClose}>
@@ -235,7 +235,7 @@ export default function WatermarkViewer({ photo, onClose }: WatermarkViewerProps
           <img
             src={src}
             alt={`${photo.title || '摄影作品'} 参数水印`}
-            className="max-h-[86vh] w-auto max-w-[min(1100px,86vw)] shadow-[0_24px_80px_rgba(20,20,20,0.16)]"
+            className="animate-scale-in max-h-[86vh] w-auto max-w-[min(1100px,86vw)] shadow-[0_24px_80px_rgba(20,20,20,0.16)]"
             draggable={false}
           />
         </ZoomStage>

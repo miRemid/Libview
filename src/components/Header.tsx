@@ -8,7 +8,7 @@ type HeaderProps = {
 export default function Header({ solid = false }: HeaderProps) {
   return (
     <header
-      className={`sticky top-0 z-50 flex h-16 w-full shrink-0 items-center border-b ${
+      className={`animate-fade-in sticky top-0 z-50 flex h-16 w-full shrink-0 items-center border-b ${
         solid
           ? 'border-line bg-paper'
           : 'border-transparent bg-paper/85 backdrop-blur-md'

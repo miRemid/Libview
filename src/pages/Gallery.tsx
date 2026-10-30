@@ -59,7 +59,7 @@ export default function Gallery() {
             {[0, 1, 2, 3, 4, 5].map((item) => (
               <div
                 key={item}
-                className="mb-2 break-inside-avoid bg-mist lg:mb-4"
+                className="animate-mist-pulse mb-2 break-inside-avoid bg-mist lg:mb-4"
                 style={{ height: item % 2 === 0 ? 180 : 260 }}
               />
             ))}
@@ -69,7 +69,7 @@ export default function Gallery() {
             {error}
           </p>
         ) : photos.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-line px-6 py-20 text-center">
+          <div className="animate-fade-up rounded-2xl border border-dashed border-line px-6 py-20 text-center">
             <p className="font-serif text-2xl text-ink">还没有照片</p>
             <p className="mt-2 text-sm text-mute">上传第一张作品后，这里就会成为图库。</p>
             <Link

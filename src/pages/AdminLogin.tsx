@@ -26,7 +26,7 @@ export default function AdminLogin() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-mist px-5">
-      <div className="w-full max-w-md rounded-3xl border border-line bg-paper p-8 shadow-[0_20px_80px_rgba(0,0,0,0.04)]">
+      <div className="animate-fade-up w-full max-w-md rounded-3xl border border-line bg-paper p-8 shadow-[0_20px_80px_rgba(0,0,0,0.04)]">
         <Link to="/" className="inline-block text-ink">
           <Logo />
         </Link>
