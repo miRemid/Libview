@@ -77,7 +77,7 @@ export default function PhotoModal() {
     <>
       <div className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper lg:overflow-hidden">
         <div className="flex min-h-full flex-col lg:h-full">
-          <div className="flex min-h-0 flex-1 items-center justify-center px-5 py-4 sm:px-8 lg:px-8 lg:py-6">
+          <div className="flex min-h-0 flex-1 items-start justify-center px-5 py-4 sm:px-8 lg:items-center lg:px-8 lg:py-6">
             {photo ? (
               <div className="grid w-full max-w-5xl grid-cols-1 lg:w-auto lg:grid-cols-[auto_280px] lg:gap-x-6">
                 <button
