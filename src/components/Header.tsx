@@ -1,5 +1,4 @@
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
 import Logo from './Logo'
 
 type HeaderProps = {
@@ -7,8 +6,6 @@ type HeaderProps = {
 }
 
 export default function Header({ solid = false }: HeaderProps) {
-  const { isAdmin } = useAuth()
-
   return (
     <header
       className={`sticky top-0 z-50 flex h-16 w-full shrink-0 items-center border-b ${
@@ -29,14 +26,6 @@ export default function Header({ solid = false }: HeaderProps) {
             }
           >
             图库
-          </NavLink>
-          <NavLink
-            to={isAdmin ? '/admin' : '/admin/login'}
-            className={({ isActive }) =>
-              isActive ? 'text-ink' : 'transition-colors hover:text-ink'
-            }
-          >
-            {isAdmin ? '管理' : '登录'}
           </NavLink>
         </nav>
       </div>
