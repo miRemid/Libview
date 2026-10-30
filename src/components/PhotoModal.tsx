@@ -35,16 +35,16 @@ export default function PhotoModal({ photo, onClose }: PhotoModalProps) {
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:items-stretch">
-          <div className="flex flex-1 items-center justify-center px-5 py-2 sm:px-8 lg:px-10 lg:py-4">
+        <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:items-start lg:justify-center lg:gap-8 lg:px-8 lg:pb-8">
+          <div className="flex justify-center px-5 py-2 sm:px-8 lg:min-w-0 lg:px-0 lg:py-0">
             <img
               src={photoUrl(photo)}
               alt={photo.title || '摄影作品'}
-              className="max-h-[72vh] w-auto max-w-full object-contain lg:max-h-full"
+              className="max-h-[72vh] w-auto max-w-full object-contain lg:max-h-[calc(100vh-7.5rem)]"
             />
           </div>
 
-          <aside className="border-t border-line px-5 py-6 sm:px-8 lg:h-full lg:w-[360px] lg:shrink-0 lg:overflow-y-auto lg:border-t-0 lg:border-l lg:px-8 lg:py-4">
+          <aside className="border-t border-line px-5 py-6 sm:px-8 lg:max-h-[calc(100vh-7.5rem)] lg:w-[300px] lg:shrink-0 lg:overflow-y-auto lg:border-t-0 lg:px-0 lg:py-0">
             <h2 className="font-serif text-2xl text-ink lg:text-3xl">
               {photo.title || '未命名'}
             </h2>
