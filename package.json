@@ -4,8 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n pb,web -c blue,green \"npm run pb\" \"vite --host\"",
+    "dev": "concurrently -n worker,web -c cyan,green \"npm run worker:dev\" \"vite --host\"",
     "web": "vite --host",
+    "worker:dev": "node scripts/ensure-dist.mjs && wrangler dev",
+    "worker:deploy": "npm run build && wrangler deploy",
+    "d1:migrate:local": "wrangler d1 execute libview --local --file=worker/schema.sql",
+    "d1:migrate": "wrangler d1 execute libview --remote --file=worker/schema.sql",
     "pb": "pocketbase serve --dir ./pocketbase/pb_data --migrationsDir ./pocketbase/pb_migrations --hooksDir ./pocketbase/pb_hooks --http=0.0.0.0:8090 --automigrate=false",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
@@ -15,6 +19,7 @@
     "docker:down": "docker compose down"
   },
   "dependencies": {
+    "aws4fetch": "^1.0.20",
     "exifr": "^7.1.3",
     "pocketbase": "^0.28.1",
     "react": "^19.3.1",
@@ -22,6 +27,7 @@
     "react-router-dom": "^7.18.5"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261023.1",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
@@ -31,6 +37,7 @@
     "oxlint": "^1.89.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2",
-    "vite": "^8.3.5"
+    "vite": "^8.3.5",
+    "wrangler": "^4.45.0"
   }
 }

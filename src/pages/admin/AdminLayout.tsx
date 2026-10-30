@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import Logo from '../../components/Logo'
-import { isAdmin, pb } from '../../lib/pocketbase'
+import { useAuth } from '../../hooks/useAuth'
+import { logout } from '../../lib/api'
 
 const links = [
   { to: '/admin', label: '概览', end: true },
@@ -11,18 +12,18 @@ const links = [
 
 export default function AdminLayout() {
   const navigate = useNavigate()
-  const allowed = isAdmin()
+  const { isAdmin: allowed, ready } = useAuth()
 
   useEffect(() => {
-    if (!allowed) navigate('/admin/login', { replace: true })
-  }, [allowed, navigate])
+    if (ready && !allowed) navigate('/admin/login', { replace: true })
+  }, [allowed, navigate, ready])
 
-  function logout() {
-    pb.authStore.clear()
+  async function onLogout() {
+    await logout().catch(() => undefined)
     navigate('/admin/login', { replace: true })
   }
 
-  if (!allowed) return null
+  if (!ready || !allowed) return null
 
   return (
     <div className="min-h-screen bg-mist">
@@ -49,7 +50,7 @@ export default function AdminLayout() {
         </nav>
         <button
           type="button"
-          onClick={logout}
+          onClick={onLogout}
           className="mt-4 text-left text-sm text-mute transition-colors hover:text-ink"
         >
           退出登录

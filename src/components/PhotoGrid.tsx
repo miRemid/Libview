@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { photoUrl } from '../lib/pocketbase'
+import { photoUrl } from '../lib/api'
 import type { Photo } from '../lib/types'
 
 type PhotoGridProps = {

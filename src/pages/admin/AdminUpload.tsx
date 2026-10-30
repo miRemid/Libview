@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Field from '../../components/admin/Field'
 import { extractImageInfo } from '../../lib/exif'
 import { emptyImageInfo } from '../../lib/imageInfo'
-import { pb } from '../../lib/pocketbase'
+import { createPhoto, putObject, signUpload } from '../../lib/api'
 import type { ImageInfo } from '../../lib/types'
 
 export default function AdminUpload() {
@@ -63,26 +63,28 @@ export default function AdminUpload() {
     setBusy(true)
     setError('')
     try {
-      const form = new FormData()
-      form.append('image', file)
-      form.append('title', title.trim())
-      form.append('description', description.trim())
-      form.append('width', String(info.width || 0))
-      form.append('height', String(info.height || 0))
-      form.append('camera_make', info.camera_make)
-      form.append('camera_model', info.camera_model)
-      form.append('lens', info.lens)
-      form.append('focal_length', info.focal_length)
-      form.append('aperture', info.aperture)
-      form.append('shutter_speed', info.shutter_speed)
-      form.append('iso', String(info.iso || 0))
-      if (info.taken_at) form.append('taken_at', info.taken_at)
-
-      await pb.collection('photos').create(form)
+      const signed = await signUpload(file.type)
+      await putObject(signed, file)
+      await createPhoto({
+        key: signed.key,
+        publicUrl: signed.publicUrl,
+        title: title.trim(),
+        description: description.trim(),
+        width: info.width || 0,
+        height: info.height || 0,
+        camera_make: info.camera_make,
+        camera_model: info.camera_model,
+        lens: info.lens,
+        focal_length: info.focal_length,
+        aperture: info.aperture,
+        shutter_speed: info.shutter_speed,
+        iso: info.iso || 0,
+        taken_at: info.taken_at,
+      })
       resetForm()
-      setMessage('已上传并写入数据库。')
+      setMessage('已上传到对象存储并写入数据库。')
     } catch {
-      setError('上传失败，请确认已登录且 PocketBase 正在运行。')
+      setError('上传失败，请确认已登录且 Worker 正在运行。')
     } finally {
       setBusy(false)
     }
@@ -93,7 +95,7 @@ export default function AdminUpload() {
       <p className="text-xs uppercase tracking-[0.28em] text-mute">Upload</p>
       <h1 className="mt-2 font-serif text-4xl text-ink">上传新图</h1>
       <p className="mt-2 text-sm text-mute">
-        图片会保存到本地 PocketBase。发布后可到
+        图片会直传到 R2，图库使用永久公网地址。发布后可到
         <Link to="/admin/photos" className="mx-1 text-ink underline">
           图片管理
         </Link>

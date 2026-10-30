@@ -1,0 +1,13 @@
+# Copy to .dev.vars for `wrangler dev`. Do not commit real secrets.
+PB_ADMIN_EMAIL=admin@libview.local
+PB_ADMIN_PASSWORD=LibviewAdmin123
+SESSION_SECRET=dev-session-secret-change-me
+
+# Production: S3 API tokens for presigned PUTs to R2.
+# Create an R2 API token with Object Read & Write on this bucket.
+# R2_ACCOUNT_ID=
+# R2_ACCESS_KEY_ID=
+# R2_SECRET_ACCESS_KEY=
+
+# Custom domain bound to the R2 bucket (no scheme). Required in production.
+# PUBLIC_R2_HOST=img.example.com

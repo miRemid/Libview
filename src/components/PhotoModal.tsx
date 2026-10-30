@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useOutletContext, useParams } from 'react-router-dom'
-import { pb, photoUrl } from '../lib/pocketbase'
+import { getPhoto, photoUrl } from '../lib/api'
 import type { Photo } from '../lib/types'
 import type { GalleryOutletContext } from '../pages/Gallery'
 import ExifStrip from './ExifStrip'
@@ -56,8 +56,7 @@ export default function PhotoModal() {
     let cancelled = false
     setPhoto(null)
     setError('')
-    pb.collection('photos')
-      .getOne<Photo>(id)
+    getPhoto(id)
       .then((record) => {
         if (!cancelled) setPhoto(record)
       })

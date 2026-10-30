@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
-import { pb } from '../lib/pocketbase'
+import { login } from '../lib/api'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ export default function AdminLogin() {
     setError('')
     setLoading(true)
     try {
-      await pb.collection('_superusers').authWithPassword(email, password)
+      await login(email, password)
       navigate('/admin', { replace: true })
     } catch {
       setError('登录失败，请检查邮箱和密码。')

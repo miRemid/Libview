@@ -1,5 +1,5 @@
 import { cameraLine, formatTakenAt } from '../lib/exif'
-import { hasCameraInfo } from '../lib/pocketbase'
+import { hasCameraInfo } from '../lib/api'
 import type { Photo } from '../lib/types'
 
 function Item({

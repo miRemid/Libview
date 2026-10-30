@@ -1,0 +1,25 @@
+name = "libview"
+main = "worker/src/index.ts"
+compatibility_date = "2025-10-11"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]
+
+[vars]
+PUBLIC_R2_HOST = ""
+R2_BUCKET_NAME = "libview-photos"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "libview"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "libview-photos"
+
+[dev]
+port = 8787

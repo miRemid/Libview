@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { pb, photoUrl } from '../../lib/pocketbase'
+import { listPhotos, photoUrl } from '../../lib/api'
 import type { Photo } from '../../lib/types'
 
 export default function AdminOverview() {
@@ -8,8 +8,7 @@ export default function AdminOverview() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    pb.collection('photos')
-      .getFullList<Photo>({ sort: '-created' })
+    listPhotos()
       .then(setPhotos)
       .catch(() => setError('无法加载图库数据。'))
   }, [])

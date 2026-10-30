@@ -1,6 +1,5 @@
-import type { RecordModel } from 'pocketbase'
-
-export type Photo = RecordModel & {
+export type Photo = {
+  id: string
   title: string
   description: string
   photographer: string
@@ -16,6 +15,8 @@ export type Photo = RecordModel & {
   shutter_speed: string
   iso: number
   taken_at: string
+  created: string
+  updated: string
 }
 
 export type ImageInfo = {

@@ -7,7 +7,7 @@ import {
   watermarkParams,
   type CameraBrand,
 } from '../lib/watermark'
-import { photoUrl } from '../lib/pocketbase'
+import { photoUrl } from '../lib/api'
 import type { Photo } from '../lib/types'
 
 type WatermarkViewerProps = {

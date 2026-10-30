@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import PhotoGrid from '../components/PhotoGrid'
-import { pb } from '../lib/pocketbase'
+import { listPhotos } from '../lib/api'
 import type { Photo } from '../lib/types'
 
 export type GalleryOutletContext = {
@@ -20,13 +20,12 @@ export default function Gallery() {
 
   useEffect(() => {
     let cancelled = false
-    pb.collection('photos')
-      .getFullList<Photo>({ sort: '-created' })
+    listPhotos()
       .then((records) => {
         if (!cancelled) setPhotos(records)
       })
       .catch(() => {
-        if (!cancelled) setError('无法加载图库，请确认 PocketBase 已启动。')
+        if (!cancelled) setError('无法加载图库，请确认 Worker 已启动。')
       })
       .finally(() => {
         if (!cancelled) setLoading(false)

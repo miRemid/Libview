@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import Field from './Field'
 import { formatTakenAt } from '../../lib/exif'
 import { infoFromPhoto } from '../../lib/imageInfo'
-import { pb, photoUrl } from '../../lib/pocketbase'
+import { photoUrl, updatePhoto } from '../../lib/api'
 import type { ImageInfo, Photo } from '../../lib/types'
 
 type PhotoEditModalProps = {
@@ -49,7 +49,7 @@ export default function PhotoEditModal({ photo, onClose, onSaved }: PhotoEditMod
         iso: info.iso || 0,
         taken_at: info.taken_at || '',
       }
-      const updated = await pb.collection('photos').update<Photo>(photo.id, data)
+      const updated = await updatePhoto(photo.id, data)
       onSaved(updated)
       onClose()
     } catch {

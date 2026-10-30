@@ -1,69 +1,95 @@
 # Libview
 
-白色系摄影图片展示站。前台瀑布流浏览作品，管理页上传新图，并自动提取相机参数写入 PocketBase。
+白色系摄影图片展示站。前台瀑布流浏览作品，管理页上传新图，并自动提取相机参数。
 
-图片目前保存在本地 PocketBase 文件存储中。每条记录预留了 `remote_url`，后续迁移到 Cloudflare Imgbed 时只需填写远程地址，前台会优先使用它。
+本分支运行时是 **Cloudflare Worker + D1 + R2**：浏览器把原图预签名直传到 R2，D1 保存永久公网 URL，博客可以直接引用这条地址。不要把 `*.r2.dev` 当正式外链（有限流、也不适合当 CDN 域名）。
+
+仓库里仍保留 Docker / PocketBase 文件，但它们不是这条分支的运行时。
 
 ## 技术栈
 
 - React + Vite + Tailwind CSS
-- PocketBase（数据库与本地图片存储）
-- GitHub 版本管理
+- Cloudflare Worker（同源 `/api`）
+- D1（照片元数据）
+- R2（原图主存储，自定义域名公网读）
 
 ## 启动
 
-本机需要已安装 [PocketBase](https://pocketbase.io/)（`pocketbase` 可在 PATH 中找到）和 Node.js。
+需要 Node.js，以及 Wrangler（`npm install` 会装到开发依赖）。
 
 ```bash
+cp .dev.vars.example .dev.vars
 npm install
+npm run d1:migrate:local
 npm run dev
 ```
 
 - 网站：http://127.0.0.1:5173
-- PocketBase：http://127.0.0.1:8090
+- Worker API：http://127.0.0.1:8787
 - 管理页：http://127.0.0.1:5173/admin
 
-首次启动会自动创建 `photos` 集合。超级管理员（Libview 管理页和 PocketBase 面板共用）从环境变量注入：
+本地没有 R2 S3 API Token 时，预签名 URL 会回落到同源 `PUT /api/uploads/object`，对象写入 Wrangler 模拟的 R2。图库用 `/api/files/{key}` 读图。
 
-```bash
+默认管理员来自 `.dev.vars`：
+
+```
 PB_ADMIN_EMAIL=admin@libview.local
-PB_ADMIN_PASSWORD=your-password
+PB_ADMIN_PASSWORD=LibviewAdmin123
 ```
 
-未设置时，本地开发仍回退到 `admin@libview.local` / `LibviewAdmin123`。请在正式使用前改掉。
+请在正式使用前改掉，并设置足够长的 `SESSION_SECRET`。
 
-## Docker 部署（SPA + PocketBase）
+## 生产部署
 
-生产环境把 Vite 打成静态 SPA，交给 PocketBase 同源托管：`/api` 和 `/_/` 是后端，其余路径回退到 `index.html`。
+1. 在 Cloudflare 创建 D1 数据库和 R2 桶：
 
-```bash
-docker compose up --build -d
-```
+   ```bash
+   npx wrangler d1 create libview
+   npx wrangler r2 bucket create libview-photos
+   ```
 
-CI 会把 `linux/amd64` 镜像推到 GHCR，供 Linux 服务器直接拉取：
+   把返回的 `database_id` 写入 `wrangler.toml`。
 
-```bash
-docker pull ghcr.io/miremid/libview:latest
-```
+2. 给 R2 桶绑定**自定义域名**（例如 `img.example.com`）。对象 key 是不可变路径 `libview/年/uuid.ext`，公网地址形如：
 
-仓库 Packages 里若是私有包，服务器上先 `echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin`。手动触发构建走 Actions 里的 **Build image**。
+   `https://img.example.com/libview/2026/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.jpg`
 
-- 网站：http://127.0.0.1:8090
-- 管理后台：http://127.0.0.1:8090/admin
-- PocketBase 面板：http://127.0.0.1:8090/_/
+3. 把该域名写入 Wrangler vars（不要带协议）：
 
-当前目录 `.env` 里的 `IMGBED_*` 和 `PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD` 会传进容器。每次启动都会按这两个变量创建或更新 PocketBase 超级管理员。数据在 Docker volume `pb_data` 里。若要用现有本地库，把 `docker-compose.yml` 里的 volume 改成：
+   ```bash
+   npx wrangler secret put SESSION_SECRET
+   npx wrangler secret put PB_ADMIN_EMAIL
+   npx wrangler secret put PB_ADMIN_PASSWORD
+   npx wrangler secret put R2_ACCOUNT_ID
+   npx wrangler secret put R2_ACCESS_KEY_ID
+   npx wrangler secret put R2_SECRET_ACCESS_KEY
+   ```
 
-```yaml
-volumes:
-  - ./pocketbase/pb_data:/pb/pb_data
-```
+   并在 `wrangler.toml` 的 `[vars]` 设置：
 
-映射 80 端口时写成 `"80:8090"` 即可。
+   ```toml
+   PUBLIC_R2_HOST = "img.example.com"
+   R2_BUCKET_NAME = "libview-photos"
+   ```
+
+   R2 API Token 需要该桶的 Object Read & Write，用来签发短 TTL、单对象、仅 PUT 的预签名 URL。Account ID / Token 不会进前端。
+
+4. 在 R2 桶 CORS 里允许站点源对 `PUT` 带 `Content-Type`。自定义域名只需公网 `GET`；不要开放列桶。
+
+5. 迁移并发布：
+
+   ```bash
+   npm run d1:migrate
+   npm run worker:deploy
+   ```
+
+Worker Static Assets 托管 Vite `dist`。`wrangler.toml` 里 `not_found_handling = "single-page-application"`，所以刷新 `/photos/:id` 不会 404。`/api/*` 由 Worker 先处理。
 
 ## 图片与元数据
 
-上传时会读取 EXIF，并保存：
+上传流程：登录 Cookie → `POST /api/uploads/sign` → 浏览器 `PUT` 原图到 R2 → `POST /api/photos`（Worker `Head` 确认对象后写入 D1）。
+
+EXIF 仍在浏览器读取，并保存：
 
 - 宽高
 - 相机品牌 / 型号
@@ -71,4 +97,4 @@ volumes:
 - 焦距、光圈、快门、ISO
 - 拍摄时间
 
-文件本体默认写入 `pocketbase/pb_data/storage/`，该目录不进入 Git。
+`remote_url` 就是 R2 公网地址，图库和博客都用这一条。删除照片时会同时删除 D1 记录和 R2 对象。

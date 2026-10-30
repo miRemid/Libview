@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import PhotoEditModal from '../../components/admin/PhotoEditModal'
 import { cameraLine, formatTakenAt } from '../../lib/exif'
-import { pb, photoUrl } from '../../lib/pocketbase'
+import { deletePhoto, listPhotos, photoUrl } from '../../lib/api'
 import type { Photo } from '../../lib/types'
 
 export default function AdminPhotos() {
@@ -11,8 +11,7 @@ export default function AdminPhotos() {
 
   useEffect(() => {
     let cancelled = false
-    pb.collection('photos')
-      .getFullList<Photo>({ sort: '-created' })
+    listPhotos()
       .then((records) => {
         if (!cancelled) setPhotos(records)
       })
@@ -26,7 +25,7 @@ export default function AdminPhotos() {
 
   async function onDelete(id: string) {
     if (!confirm('确定删除这张照片？')) return
-    await pb.collection('photos').delete(id)
+    await deletePhoto(id)
     setPhotos((current) => current.filter((photo) => photo.id !== id))
   }
 
