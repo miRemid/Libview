@@ -1,16 +1,22 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import PhotoGrid from '../components/PhotoGrid'
-import PhotoModal from '../components/PhotoModal'
 import { pb } from '../lib/pocketbase'
 import type { Photo } from '../lib/types'
 
+export type GalleryOutletContext = {
+  photos: Photo[]
+}
+
+const GALLERY_SCROLL_KEY = 'libview:gallery-scroll' // keep in sync with PhotoGrid
+
 export default function Gallery() {
+  const location = useLocation()
   const [photos, setPhotos] = useState<Photo[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [selected, setSelected] = useState<Photo | null>(null)
+  const onGalleryHome = location.pathname === '/'
 
   useEffect(() => {
     let cancelled = false
@@ -29,6 +35,21 @@ export default function Gallery() {
       cancelled = true
     }
   }, [])
+
+  useEffect(() => {
+    if (!onGalleryHome) return
+    const onScroll = () => {
+      sessionStorage.setItem(GALLERY_SCROLL_KEY, String(window.scrollY))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [onGalleryHome])
+
+  useLayoutEffect(() => {
+    if (!onGalleryHome || loading) return
+    const y = Number(sessionStorage.getItem(GALLERY_SCROLL_KEY) || '0')
+    window.scrollTo(0, y)
+  }, [loading, onGalleryHome])
 
   return (
     <div className="min-h-screen bg-paper">
@@ -70,12 +91,10 @@ export default function Gallery() {
             </Link>
           </div>
         ) : (
-          <PhotoGrid photos={photos} onSelect={setSelected} />
+          <PhotoGrid photos={photos} />
         )}
       </main>
-      {selected ? (
-        <PhotoModal photo={selected} onClose={() => setSelected(null)} />
-      ) : null}
+      <Outlet context={{ photos }} />
     </div>
   )
 }

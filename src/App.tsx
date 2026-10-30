@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import PhotoModal from './components/PhotoModal'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminOverview from './pages/admin/AdminOverview'
 import AdminPhotos from './pages/admin/AdminPhotos'
@@ -9,7 +10,10 @@ import Gallery from './pages/Gallery'
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Gallery />} />
+      <Route element={<Gallery />}>
+        <Route index element={null} />
+        <Route path="photos/:id" element={<PhotoModal />} />
+      </Route>
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminOverview />} />

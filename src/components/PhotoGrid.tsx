@@ -1,19 +1,22 @@
+import { Link } from 'react-router-dom'
 import { photoUrl } from '../lib/pocketbase'
 import type { Photo } from '../lib/types'
 
 type PhotoGridProps = {
   photos: Photo[]
-  onSelect: (photo: Photo) => void
 }
 
-export default function PhotoGrid({ photos, onSelect }: PhotoGridProps) {
+export default function PhotoGrid({ photos }: PhotoGridProps) {
   return (
     <div className="columns-2 gap-2 lg:columns-3 lg:gap-4">
       {photos.map((photo) => (
-        <button
+        <Link
           key={photo.id}
-          type="button"
-          onClick={() => onSelect(photo)}
+          to={`/photos/${photo.id}`}
+          state={{ fromGallery: true }}
+          onClick={() => {
+            sessionStorage.setItem('libview:gallery-scroll', String(window.scrollY))
+          }}
           className="group relative mb-2 block w-full break-inside-avoid overflow-hidden bg-mist text-left lg:mb-4"
         >
           <img
@@ -37,7 +40,7 @@ export default function PhotoGrid({ photos, onSelect }: PhotoGridProps) {
               </p>
             ) : null}
           </div>
-        </button>
+        </Link>
       ))}
     </div>
   )
