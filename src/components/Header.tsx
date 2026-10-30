@@ -10,7 +10,7 @@ export default function Header({ solid = false }: HeaderProps) {
 
   return (
     <header
-      className={`sticky top-0 z-30 border-b ${
+      className={`sticky top-0 z-30 shrink-0 border-b ${
         solid
           ? 'border-line bg-paper'
           : 'border-transparent bg-paper/85 backdrop-blur-md'
