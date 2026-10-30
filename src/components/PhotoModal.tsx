@@ -17,6 +17,7 @@ export default function PhotoModal() {
   const cached = photos.find((photo) => photo.id === id)
   const [photo, setPhoto] = useState<Photo | null>(cached ?? null)
   const [error, setError] = useState('')
+  const [lightbox, setLightbox] = useState(false)
 
   const close = useCallback(() => {
     const state = location.state as LocationState | null
@@ -29,7 +30,12 @@ export default function PhotoModal() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close()
+      if (event.key !== 'Escape') return
+      if (lightbox) {
+        setLightbox(false)
+        return
+      }
+      close()
     }
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
@@ -37,7 +43,7 @@ export default function PhotoModal() {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', onKey)
     }
-  }, [close])
+  }, [close, lightbox])
 
   useEffect(() => {
     if (cached) {
@@ -62,57 +68,84 @@ export default function PhotoModal() {
     }
   }, [cached, id])
 
+  useEffect(() => {
+    setLightbox(false)
+  }, [id])
+
   return (
-    <div className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper lg:overflow-hidden">
-      <div className="flex min-h-full flex-col lg:h-full">
-        <div className="flex min-h-0 flex-1 items-center justify-center px-5 py-4 sm:px-8 lg:px-8 lg:py-6">
-          {photo ? (
-            <div className="grid w-full max-w-5xl grid-cols-1 lg:w-auto lg:grid-cols-[auto_280px] lg:gap-x-6">
-              <button
-                type="button"
-                onClick={close}
-                aria-label="返回"
-                className="col-start-1 row-start-1 mb-3 justify-self-start text-mute transition-colors hover:text-ink"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6"
-                  fill="none"
-                  aria-hidden="true"
+    <>
+      <div className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper lg:overflow-hidden">
+        <div className="flex min-h-full flex-col lg:h-full">
+          <div className="flex min-h-0 flex-1 items-center justify-center px-5 py-4 sm:px-8 lg:px-8 lg:py-6">
+            {photo ? (
+              <div className="grid w-full max-w-5xl grid-cols-1 lg:w-auto lg:grid-cols-[auto_280px] lg:gap-x-6">
+                <button
+                  type="button"
+                  onClick={close}
+                  aria-label="返回"
+                  className="col-start-1 row-start-1 mb-3 justify-self-start text-mute transition-colors hover:text-ink"
                 >
-                  <path
-                    d="M15 5 8 12l7 7"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-6 w-6"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M15 5 8 12l7 7"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLightbox(true)}
+                  className="col-start-1 row-start-2 cursor-zoom-in justify-self-start"
+                >
+                  <img
+                    src={photoUrl(photo)}
+                    alt={photo.title || '摄影作品'}
+                    className="max-h-[58vh] w-auto max-w-full object-contain lg:max-h-[64vh] lg:max-w-[min(640px,52vw)]"
                   />
-                </svg>
-              </button>
-              <img
-                src={photoUrl(photo)}
-                alt={photo.title || '摄影作品'}
-                className="col-start-1 row-start-2 max-h-[58vh] w-auto max-w-full justify-self-start object-contain lg:max-h-[64vh] lg:max-w-[min(640px,52vw)]"
-              />
-              <aside className="col-start-1 row-start-3 mt-6 border-t border-line pt-6 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:max-h-[64vh] lg:overflow-y-auto lg:border-t-0 lg:pt-0">
-                <h2 className="font-serif text-2xl text-ink">
-                  {photo.title || '未命名'}
-                </h2>
-                {photo.description ? (
-                  <p className="mt-4 text-[15px] leading-relaxed text-mute">
-                    {photo.description}
-                  </p>
-                ) : null}
-                <div className="mt-8">
-                  <ExifStrip photo={photo} />
-                </div>
-              </aside>
-            </div>
-          ) : (
-            <p className="text-sm text-mute">{error || '正在打开照片…'}</p>
-          )}
+                </button>
+                <aside className="col-start-1 row-start-3 mt-6 border-t border-line pt-6 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:max-h-[64vh] lg:overflow-y-auto lg:border-t-0 lg:pt-0">
+                  <h2 className="font-serif text-2xl text-ink">
+                    {photo.title || '未命名'}
+                  </h2>
+                  {photo.description ? (
+                    <p className="mt-4 text-[15px] leading-relaxed text-mute">
+                      {photo.description}
+                    </p>
+                  ) : null}
+                  <div className="mt-8">
+                    <ExifStrip photo={photo} />
+                  </div>
+                </aside>
+              </div>
+            ) : (
+              <p className="text-sm text-mute">{error || '正在打开照片…'}</p>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+      {lightbox && photo ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="查看大图"
+          className="fixed inset-0 z-[70] flex cursor-zoom-out items-center justify-center bg-paper"
+          onClick={() => setLightbox(false)}
+        >
+          <img
+            src={photoUrl(photo)}
+            alt={photo.title || '摄影作品'}
+            className="max-h-full max-w-full object-contain"
+          />
+        </div>
+      ) : null}
+    </>
   )
 }
