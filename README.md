@@ -23,12 +23,14 @@ npm run dev
 - PocketBase：http://127.0.0.1:8090
 - 管理页：http://127.0.0.1:5173/admin
 
-首次启动会自动创建 `photos` 集合，以及本地管理员：
+首次启动会自动创建 `photos` 集合。超级管理员（Libview 管理页和 PocketBase 面板共用）从环境变量注入：
 
-- 邮箱：`admin@libview.local`
-- 密码：`LibviewAdmin123`
+```bash
+PB_ADMIN_EMAIL=admin@libview.local
+PB_ADMIN_PASSWORD=your-password
+```
 
-请在正式使用前修改该密码。
+未设置时，本地开发仍回退到 `admin@libview.local` / `LibviewAdmin123`。请在正式使用前改掉。
 
 ## Docker 部署（SPA + PocketBase）
 
@@ -42,7 +44,7 @@ docker compose up --build -d
 - 管理后台：http://127.0.0.1:8090/admin
 - PocketBase 面板：http://127.0.0.1:8090/_/
 
-ImgBed 读取当前目录的 `.env`（`IMGBED_URL`、`IMGBED_TOKEN`），compose 会传进容器。数据在 Docker volume `pb_data` 里。若要用现有本地库，把 `docker-compose.yml` 里的 volume 改成：
+当前目录 `.env` 里的 `IMGBED_*` 和 `PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD` 会传进容器。每次启动都会按这两个变量创建或更新 PocketBase 超级管理员。数据在 Docker volume `pb_data` 里。若要用现有本地库，把 `docker-compose.yml` 里的 volume 改成：
 
 ```yaml
 volumes:

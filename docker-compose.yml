@@ -12,6 +12,8 @@ services:
     environment:
       IMGBED_URL: ${IMGBED_URL:-}
       IMGBED_TOKEN: ${IMGBED_TOKEN:-}
+      PB_ADMIN_EMAIL: ${PB_ADMIN_EMAIL:-}
+      PB_ADMIN_PASSWORD: ${PB_ADMIN_PASSWORD:-}
     restart: unless-stopped
 
 volumes:
