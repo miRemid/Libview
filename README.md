@@ -40,6 +40,14 @@ PB_ADMIN_PASSWORD=your-password
 docker compose up --build -d
 ```
 
+CI 会把 `linux/amd64` 镜像推到 GHCR，供 Linux 服务器直接拉取：
+
+```bash
+docker pull ghcr.io/miremid/libview:latest
+```
+
+仓库 Packages 里若是私有包，服务器上先 `echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin`。手动触发构建走 Actions 里的 **Build image**。
+
 - 网站：http://127.0.0.1:8090
 - 管理后台：http://127.0.0.1:8090/admin
 - PocketBase 面板：http://127.0.0.1:8090/_/
