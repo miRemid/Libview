@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import Logo from '../../components/Logo'
 import { isAdmin, pb } from '../../lib/pocketbase'
 
 const links = [
@@ -26,8 +27,8 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-mist">
       <aside className="fixed inset-y-0 left-0 z-20 flex w-56 flex-col border-r border-line bg-paper px-5 py-6">
-        <Link to="/" className="font-serif text-2xl text-ink">
-          Libview
+        <Link to="/" className="text-ink">
+          <Logo className="h-7 w-auto" />
         </Link>
         <p className="mt-1 text-xs uppercase tracking-[0.2em] text-mute">Dashboard</p>
         <nav className="mt-8 flex flex-1 flex-col gap-1 text-sm">

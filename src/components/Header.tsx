@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import Logo from './Logo'
 
 type HeaderProps = {
   solid?: boolean
@@ -17,8 +18,8 @@ export default function Header({ solid = false }: HeaderProps) {
       }`}
     >
       <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-5 sm:px-8">
-        <Link to="/" className="font-serif text-[1.65rem] tracking-tight text-ink">
-          Libview
+        <Link to="/" className="text-ink">
+          <Logo />
         </Link>
         <nav className="flex items-center gap-6 text-sm text-mute">
           <NavLink

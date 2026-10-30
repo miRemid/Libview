@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 import { pb } from '../lib/pocketbase'
 
 export default function AdminLogin() {
@@ -26,8 +27,8 @@ export default function AdminLogin() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-mist px-5">
       <div className="w-full max-w-md rounded-3xl border border-line bg-paper p-8 shadow-[0_20px_80px_rgba(0,0,0,0.04)]">
-        <Link to="/" className="font-serif text-2xl text-ink">
-          Libview
+        <Link to="/" className="inline-block text-ink">
+          <Logo />
         </Link>
         <h1 className="mt-8 font-serif text-3xl text-ink">管理登录</h1>
         <p className="mt-2 text-sm text-mute">上传新图、查看已保存的相机参数。</p>
