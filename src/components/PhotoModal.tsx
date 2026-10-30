@@ -4,6 +4,7 @@ import { pb, photoUrl } from '../lib/pocketbase'
 import type { Photo } from '../lib/types'
 import type { GalleryOutletContext } from '../pages/Gallery'
 import ExifStrip from './ExifStrip'
+import WatermarkViewer from './WatermarkViewer'
 
 type LocationState = {
   fromGallery?: boolean
@@ -132,19 +133,7 @@ export default function PhotoModal() {
         </div>
       </div>
       {lightbox && photo ? (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="查看大图"
-          className="fixed inset-0 z-[70] flex cursor-zoom-out items-center justify-center bg-paper"
-          onClick={() => setLightbox(false)}
-        >
-          <img
-            src={photoUrl(photo)}
-            alt={photo.title || '摄影作品'}
-            className="max-h-full max-w-full object-contain"
-          />
-        </div>
+        <WatermarkViewer photo={photo} onClose={() => setLightbox(false)} />
       ) : null}
     </>
   )
