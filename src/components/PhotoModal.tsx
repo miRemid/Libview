@@ -71,9 +71,23 @@ export default function PhotoModal() {
               <button
                 type="button"
                 onClick={close}
-                className="col-start-1 row-start-1 mb-3 justify-self-start text-sm text-mute transition-colors hover:text-ink"
+                aria-label="返回"
+                className="col-start-1 row-start-1 mb-3 justify-self-start text-mute transition-colors hover:text-ink"
               >
-                返回
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-6 w-6"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M15 5 8 12l7 7"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
               <img
                 src={photoUrl(photo)}
