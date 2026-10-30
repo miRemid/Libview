@@ -9,17 +9,21 @@ not_found_handling = "single-page-application"
 run_worker_first = ["/api/*"]
 
 [vars]
-PUBLIC_R2_HOST = ""
+PUBLIC_R2_HOST = "view-img.thinkmoe.icu"
 R2_BUCKET_NAME = "libview-photos"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "libview"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "c3b0e455-7bfc-4f0c-ace7-2806e3480e33"
 
 [[r2_buckets]]
 binding = "PHOTOS"
 bucket_name = "libview-photos"
+
+[[routes]]
+pattern = "view.thinkmoe.icu"
+custom_domain = true
 
 [dev]
 port = 8787
