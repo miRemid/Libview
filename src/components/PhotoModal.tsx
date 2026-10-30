@@ -46,9 +46,6 @@ export default function PhotoModal({ photo, onClose }: PhotoModalProps) {
             <h2 className="font-serif text-3xl text-ink">
               {photo.title || '未命名'}
             </h2>
-            {photo.photographer ? (
-              <p className="mt-2 text-sm text-mute">{photo.photographer}</p>
-            ) : null}
             {photo.description ? (
               <p className="mt-4 text-[15px] leading-relaxed text-mute">
                 {photo.description}

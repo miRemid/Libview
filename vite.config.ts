@@ -5,11 +5,22 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    host: true,
     port: 5173,
+    allowedHosts: true,
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:8090',
         changeOrigin: true,
+        ws: true,
+        xfwd: false,
+        configure(proxy) {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.removeHeader('x-forwarded-for')
+            proxyReq.removeHeader('x-forwarded-host')
+            proxyReq.removeHeader('x-forwarded-proto')
+          })
+        },
       },
     },
   },

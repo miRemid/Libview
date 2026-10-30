@@ -1,5 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
-import Admin from './pages/Admin'
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminOverview from './pages/admin/AdminOverview'
+import AdminPhotos from './pages/admin/AdminPhotos'
+import AdminUpload from './pages/admin/AdminUpload'
 import AdminLogin from './pages/AdminLogin'
 import Gallery from './pages/Gallery'
 
@@ -8,7 +11,11 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Gallery />} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminOverview />} />
+        <Route path="upload" element={<AdminUpload />} />
+        <Route path="photos" element={<AdminPhotos />} />
+      </Route>
     </Routes>
   )
 }

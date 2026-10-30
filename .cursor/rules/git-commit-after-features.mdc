@@ -1,0 +1,14 @@
+---
+description: Commit to git after each finished feature update
+alwaysApply: true
+---
+
+# Git after feature work
+
+When a feature, fix, or meaningful behavior change is finished and verified, create a git commit in the same turn. Do not leave completed work uncommitted.
+
+- Follow the repo git safety protocol: never update git config, never skip hooks, never force-push, never commit secrets (`.env`, tokens, `pocketbase/pb_data`).
+- Stage only files that belong to the finished change. Use `git status` and `git diff` before committing.
+- Write a concise commit message that explains why the change exists, matching this repo's style.
+- If the user explicitly says not to commit, skip it.
+- Tiny typo-only or in-progress/broken work does not need a commit until the feature is actually done.

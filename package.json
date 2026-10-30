@@ -4,12 +4,13 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n pb,web -c blue,green \"npm run pb\" \"vite\"",
-    "web": "vite",
-    "pb": "pocketbase serve --dir ./pocketbase/pb_data --migrationsDir ./pocketbase/pb_migrations --http=127.0.0.1:8090 --automigrate=false",
+    "dev": "concurrently -n pb,web -c blue,green \"npm run pb\" \"vite --host\"",
+    "web": "vite --host",
+    "pb": "pocketbase serve --dir ./pocketbase/pb_data --migrationsDir ./pocketbase/pb_migrations --hooksDir ./pocketbase/pb_hooks --http=0.0.0.0:8090 --automigrate=false",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed:unsplash": "node scripts/seed-unsplash.mjs"
   },
   "dependencies": {
     "exifr": "^7.1.3",
