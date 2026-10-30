@@ -54,17 +54,7 @@ export default function Gallery() {
   return (
     <div className="min-h-screen bg-paper">
       <Header />
-      <main className="mx-auto max-w-7xl px-3 pb-16 sm:px-8 lg:pb-20">
-        <section className="py-8 sm:py-14 lg:py-20">
-          <p className="text-xs uppercase tracking-[0.28em] text-mute">Photography</p>
-          <h1 className="mt-3 max-w-2xl font-serif text-3xl leading-tight text-ink sm:text-4xl lg:text-6xl">
-            把光留下。
-          </h1>
-          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-mute">
-            Libview 是一个安静的摄影展示空间。每张照片都会保存相机参数，方便回看当时的光线与选择。
-          </p>
-        </section>
-
+      <main className="mx-auto max-w-7xl px-3 pb-16 pt-4 sm:px-8 sm:pt-6 lg:pb-20">
         {loading ? (
           <div className="columns-2 gap-2 lg:columns-3 lg:gap-4">
             {[0, 1, 2, 3, 4, 5].map((item) => (
