@@ -105,6 +105,10 @@ export function photoUrl(photo: Photo, thumb?: string) {
   return photo.remote_url
 }
 
+export function photoFileUrl(photo: Photo) {
+  return `/api/photos/${photo.id}/file`
+}
+
 export function hasCameraInfo(photo: Photo) {
   return Boolean(
     photo.camera_make ||

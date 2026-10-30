@@ -7,7 +7,7 @@ import {
   watermarkParams,
   type CameraBrand,
 } from '../lib/watermark'
-import { photoUrl } from '../lib/api'
+import { photoFileUrl, photoUrl } from '../lib/api'
 import type { Photo } from '../lib/types'
 
 type WatermarkViewerProps = {
@@ -204,7 +204,7 @@ export default function WatermarkViewer({ photo, onClose }: WatermarkViewerProps
     let objectUrl = ''
     setSrc('')
     setFallback(false)
-    renderExifWatermark(photo, photoUrl(photo))
+    renderExifWatermark(photo, photoFileUrl(photo))
       .then((blob) => {
         if (cancelled) return
         objectUrl = URL.createObjectURL(blob)

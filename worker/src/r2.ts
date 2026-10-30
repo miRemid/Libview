@@ -112,8 +112,7 @@ export async function handleObjectPut(request: Request, env: Env): Promise<Respo
   return noContent()
 }
 
-export async function handlePublicFile(request: Request, env: Env): Promise<Response> {
-  const key = decodeURIComponent(new URL(request.url).pathname.replace(/^\/api\/files\//, ''))
+export async function objectResponse(env: Env, key: string): Promise<Response> {
   if (!isValidKey(key)) throw new HttpError(404, 'Not found')
   const object = await env.PHOTOS.get(key)
   if (!object) throw new HttpError(404, 'Not found')
@@ -122,6 +121,11 @@ export async function handlePublicFile(request: Request, env: Env): Promise<Resp
   object.writeHttpMetadata(headers)
   headers.set('etag', object.httpEtag)
   return new Response(object.body, { headers })
+}
+
+export async function handlePublicFile(request: Request, env: Env): Promise<Response> {
+  const key = decodeURIComponent(new URL(request.url).pathname.replace(/^\/api\/files\//, ''))
+  return objectResponse(env, key)
 }
 
 export async function assertObjectExists(env: Env, key: string): Promise<void> {

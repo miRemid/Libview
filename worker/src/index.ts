@@ -6,6 +6,7 @@ import {
   handleDeletePhoto,
   handleGetPhoto,
   handleListPhotos,
+  handlePhotoFile,
   handleUpdatePhoto,
 } from './photos'
 import { handleObjectPut, handlePublicFile, handleSign } from './r2'
@@ -31,6 +32,10 @@ async function route(request: Request, env: Env): Promise<Response> {
   }
   if (path === '/api/photos' && method === 'GET') {
     return handleListPhotos(env)
+  }
+  const photoFile = match(path, /^\/api\/photos\/([^/]+)\/file$/)
+  if (photoFile && method === 'GET') {
+    return handlePhotoFile(env, photoFile[0])
   }
   const photoId = match(path, /^\/api\/photos\/([^/]+)$/)
   if (photoId && method === 'GET') {

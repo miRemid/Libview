@@ -74,7 +74,13 @@ PB_ADMIN_PASSWORD=LibviewAdmin123
 
    R2 API Token 需要该桶的 Object Read & Write，用来签发短 TTL、单对象、仅 PUT 的预签名 URL。Account ID / Token 不会进前端。
 
-4. 在 R2 桶 CORS 里允许站点源对 `PUT` 带 `Content-Type`。自定义域名只需公网 `GET`；不要开放列桶。
+4. 在 R2 桶 CORS 里允许站点源 `GET`/`HEAD`（详情页水印会跨域读原图）。仓库里有 `worker/cors.json`：
+
+   ```bash
+   npx wrangler r2 bucket cors set libview-photos --file worker/cors.json
+   ```
+
+   自定义域名仍只做公网读；不要开放列桶。水印也会走同源 `/api/photos/:id/file`，不依赖 CORS。
 
 5. 迁移并发布：
 

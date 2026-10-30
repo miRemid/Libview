@@ -1,6 +1,6 @@
 import type { Env } from './env'
 import { asNumber, asString, HttpError, json, newId, noContent, nowIso, readJson } from './http'
-import { assertObjectExists, deleteObject, isValidKey, publicUrl } from './r2'
+import { assertObjectExists, deleteObject, isValidKey, objectResponse, publicUrl } from './r2'
 
 export type PhotoRow = {
   id: string
@@ -63,6 +63,11 @@ export async function handleListPhotos(env: Env): Promise<Response> {
 export async function handleGetPhoto(env: Env, id: string): Promise<Response> {
   const row = await findPhoto(env, id)
   return json(toPhoto(row))
+}
+
+export async function handlePhotoFile(env: Env, id: string): Promise<Response> {
+  const row = await findPhoto(env, id)
+  return objectResponse(env, row.r2_key)
 }
 
 export async function handleCreatePhoto(request: Request, env: Env): Promise<Response> {
