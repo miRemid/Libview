@@ -35,28 +35,30 @@ export default function PhotoModal({ photo, onClose }: PhotoModalProps) {
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:items-start lg:justify-center lg:gap-8 lg:px-8 lg:pb-8">
-          <div className="flex justify-center px-5 py-2 sm:px-8 lg:min-w-0 lg:px-0 lg:py-0">
-            <img
-              src={photoUrl(photo)}
-              alt={photo.title || '摄影作品'}
-              className="max-h-[72vh] w-auto max-w-full object-contain lg:max-h-[calc(100vh-7.5rem)]"
-            />
-          </div>
-
-          <aside className="border-t border-line px-5 py-6 sm:px-8 lg:max-h-[calc(100vh-7.5rem)] lg:w-[300px] lg:shrink-0 lg:overflow-y-auto lg:border-t-0 lg:px-0 lg:py-0">
-            <h2 className="font-serif text-2xl text-ink lg:text-3xl">
-              {photo.title || '未命名'}
-            </h2>
-            {photo.description ? (
-              <p className="mt-4 text-[15px] leading-relaxed text-mute">
-                {photo.description}
-              </p>
-            ) : null}
-            <div className="mt-8">
-              <ExifStrip photo={photo} />
+        <div className="flex min-h-0 flex-1 items-center justify-center px-5 py-4 sm:px-8 lg:px-8 lg:py-6">
+          <div className="flex w-full max-w-5xl flex-col lg:w-auto lg:flex-row lg:items-start lg:gap-6">
+            <div className="flex justify-center">
+              <img
+                src={photoUrl(photo)}
+                alt={photo.title || '摄影作品'}
+                className="max-h-[58vh] w-auto max-w-full object-contain lg:max-h-[64vh] lg:max-w-[min(640px,52vw)]"
+              />
             </div>
-          </aside>
+
+            <aside className="mt-6 border-t border-line pt-6 lg:mt-0 lg:max-h-[64vh] lg:w-[280px] lg:shrink-0 lg:overflow-y-auto lg:border-t-0 lg:pt-0">
+              <h2 className="font-serif text-2xl text-ink">
+                {photo.title || '未命名'}
+              </h2>
+              {photo.description ? (
+                <p className="mt-4 text-[15px] leading-relaxed text-mute">
+                  {photo.description}
+                </p>
+              ) : null}
+              <div className="mt-8">
+                <ExifStrip photo={photo} />
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     </div>
